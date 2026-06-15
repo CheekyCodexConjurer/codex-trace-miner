@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implementation Pack"
+  short_description: "Prepare safe implementation handoffs"
+  default_prompt: "Use $implementation-pack to prepare a clear handoff for one implementation slice."

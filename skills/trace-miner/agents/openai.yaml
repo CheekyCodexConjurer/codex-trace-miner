@@ -1,0 +1,4 @@
+interface:
+  display_name: "Trace Miner"
+  short_description: "Mine trace patterns for Codex workflows"
+  default_prompt: "Use $trace-miner to turn trace evidence into safer Codex workflows."

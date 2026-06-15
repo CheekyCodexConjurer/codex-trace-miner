@@ -1,0 +1,13 @@
+{
+  "mcp_servers": {
+    "trace-miner-context": {
+      "command": "python",
+      "args": [
+        "${PLUGIN_ROOT}/mcp/trace_miner_server.py"
+      ],
+      "env": {
+        "TRACE_MINER_ROOT": "${PLUGIN_ROOT}"
+      }
+    }
+  }
+}

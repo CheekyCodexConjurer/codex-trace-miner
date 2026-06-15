@@ -1,0 +1,4 @@
+interface:
+  display_name: "Finalguard Review"
+  short_description: "Run final safety review before stopping"
+  default_prompt: "Use $finalguard-review to check risks, tests, and changed files before final answer."

@@ -1,0 +1,97 @@
+{
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create a valid Codex plugin project named codex-trace-miner.",
+      "status": "done",
+      "evidence": ".codex-plugin/plugin.json and README.md"
+    },
+    {
+      "id": "REQ-2",
+      "text": "Add seven requested skills with clear triggers, workflows, and outputs.",
+      "status": "done",
+      "evidence": "skills/*/SKILL.md"
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add session-start, pre-tool-use, and stop hooks with conservative behavior.",
+      "status": "done",
+      "evidence": "hooks/hooks.json and tests/test_hooks.py"
+    },
+    {
+      "id": "REQ-4",
+      "text": "Add optional MCP only for real read-only context.",
+      "status": "done",
+      "evidence": ".mcp.json and mcp/trace_miner_server.py"
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add source index, extracted patterns, operating protocol, eval plan, scorecard, and README.",
+      "status": "done",
+      "evidence": "docs/, eval/, README.md"
+    }
+  ],
+  "validation": [
+    {
+      "command": "python -m pytest tests/test_hooks.py -q -p no:cacheprovider",
+      "status": "pass",
+      "evidence": "8 passed on 2026-06-15"
+    },
+    {
+      "command": "python scripts/validate_plugin.py",
+      "status": "pass",
+      "evidence": "Trace Miner plugin validation passed on 2026-06-15"
+    },
+    {
+      "command": "python -m json.tool .codex-plugin/plugin.json; python -m json.tool hooks/hooks.json; python -m json.tool .mcp.json",
+      "status": "pass",
+      "evidence": "All JSON manifests parsed on 2026-06-15"
+    },
+    {
+      "command": "PowerShell MCP smoke: '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/list\",\"params\":{}}' | python mcp\\trace_miner_server.py --once",
+      "status": "pass",
+      "evidence": "Returned get_source_index, get_extracted_patterns, get_operating_protocol, and get_eval_scorecard"
+    }
+  ],
+  "changed_scope": [
+    {
+      "path": ".codex-plugin/",
+      "reason": "Codex plugin manifest"
+    },
+    {
+      "path": "skills/",
+      "reason": "Runtime skills"
+    },
+    {
+      "path": "hooks/",
+      "reason": "Conservative hook implementation"
+    },
+    {
+      "path": "mcp/",
+      "reason": "Read-only MCP context server"
+    },
+    {
+      "path": "docs/ and eval/",
+      "reason": "Source index, operating protocol, patterns, and scorecard"
+    },
+    {
+      "path": "tests/ and scripts/",
+      "reason": "Local validation"
+    }
+  ],
+  "risks": [
+    {
+      "id": "R-1",
+      "description": "Before/after behavior eval has not been run yet.",
+      "status": "deferred_with_reason",
+      "owner": "future evaluator"
+    },
+    {
+      "id": "R-2",
+      "description": "Some public source licenses/provenance need deeper review before extracting detailed patterns.",
+      "status": "deferred_with_reason",
+      "owner": "future researcher"
+    }
+  ],
+  "next_action": "Initialize Git and commit the scaffold locally."
+}

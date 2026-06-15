@@ -1,0 +1,34 @@
+{
+  "name": "codex-trace-miner",
+  "version": "0.1.0",
+  "description": "Trace Miner packages skills, hooks, docs, and evals for turning public agent trace patterns into safer Codex workflows.",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "agent-traces",
+    "planning",
+    "evals",
+    "hooks"
+  ],
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Trace Miner",
+    "shortDescription": "Mine trace patterns into safer Codex workflows",
+    "longDescription": "Trace Miner helps Codex extract reusable operating patterns from public trace datasets and related open-source projects without copying leaked prompts or raw chain-of-thought. It bundles concise workflow skills, conservative hooks, read-only context MCP tools, and before/after evals.",
+    "developerName": "AERA Research",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Review",
+      "Workflow"
+    ],
+    "defaultPrompt": [
+      "Use Trace Miner to plan this risky implementation.",
+      "Use Trace Miner to build a requirements ledger.",
+      "Use Trace Miner to run a finalguard review."
+    ],
+    "brandColor": "#2563EB"
+  }
+}

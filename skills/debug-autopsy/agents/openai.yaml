@@ -1,0 +1,4 @@
+interface:
+  display_name: "Debug Autopsy"
+  short_description: "Turn failures into reusable fixes"
+  default_prompt: "Use $debug-autopsy to diagnose a failure and record the prevention pattern."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Context Router"
+  short_description: "Route context by evidence and risk"
+  default_prompt: "Use $context-router to choose the smallest useful context set for this task."

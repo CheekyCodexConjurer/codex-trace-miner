@@ -1,0 +1,4 @@
+interface:
+  display_name: "Requirements Ledger"
+  short_description: "Track requirements, evidence, and risks"
+  default_prompt: "Use $requirements-ledger to keep requirements, evidence, tests, and risks aligned."
