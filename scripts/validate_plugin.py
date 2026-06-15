@@ -8,6 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_SKILLS = {
     "trace-miner",
+    "trace-researcher",
+    "skill-router",
     "planning-architect",
     "requirements-ledger",
     "implementation-pack",
@@ -20,6 +22,10 @@ REQUIRED_DOCS = {
     "docs/extracted-patterns.md",
     "docs/codex-operating-protocol.md",
     "docs/eval-plan.md",
+    "docs/behavior-study.md",
+    "docs/routing-guide.md",
+    "docs/source-notes.md",
+    "docs/tool-automation.md",
     "eval/before-after-scorecard.md",
 }
 
@@ -103,12 +109,54 @@ def validate_hooks_and_mcp() -> None:
         fail("missing trace-miner-context MCP server")
 
 
+def validate_patterns() -> None:
+    path = ROOT / "patterns" / "patterns.jsonl"
+    if not path.exists():
+        fail("missing patterns/patterns.jsonl")
+    required = {
+        "id",
+        "name",
+        "behavior",
+        "sources",
+        "evidence_type",
+        "runtime_rule",
+        "target_skills",
+        "eval_check",
+        "risk",
+        "confidence",
+        "classification",
+        "destination",
+    }
+    count = 0
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+        if not line.strip():
+            continue
+        record = json.loads(line)
+        missing = required - record.keys()
+        if missing:
+            fail(f"pattern line {line_number} missing fields: {sorted(missing)}")
+        if not isinstance(record["sources"], list):
+            fail(f"pattern line {line_number} sources must be a list")
+        if not isinstance(record["target_skills"], list):
+            fail(f"pattern line {line_number} target_skills must be a list")
+        if not isinstance(record["classification"], list) or not record["classification"]:
+            fail(f"pattern line {line_number} classification must be a non-empty list")
+        if not isinstance(record["destination"], list) or not record["destination"]:
+            fail(f"pattern line {line_number} destination must be a non-empty list")
+        if record["confidence"] not in {"low", "medium", "high"}:
+            fail(f"pattern line {line_number} has invalid confidence")
+        count += 1
+    if count < 7:
+        fail("patterns.jsonl should contain at least 7 records")
+
+
 def main() -> int:
     try:
         validate_manifest()
         validate_skills()
         validate_docs()
         validate_hooks_and_mcp()
+        validate_patterns()
     except Exception as exc:
         print(f"FAIL: {exc}")
         return 1

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Trace Researcher"
+  short_description: "Study public trace sources safely"
+  default_prompt: "Use $trace-researcher to study public sources and extract behavior patterns."

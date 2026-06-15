@@ -1,11 +1,13 @@
 ---
 name: requirements-ledger
-description: Maintain a compact requirements, validation, changed-files, and risk ledger for non-trivial Codex work. Use when a task has multiple requirements, unresolved risks, test obligations, handoffs, backtest/data/live-trading safety concerns, or when a stop guard needs durable evidence before final answer.
+description: Requirements ledger tracking for multi-step, risk-heavy, or validation-heavy Codex work. Use when a task has multiple requirements, unresolved risks, tests, handoffs, backtest/data/live-trading safety concerns, changed-scope tracking, or when a stop guard needs durable evidence before final answer.
 ---
 
 # Requirements Ledger
 
 Use `.trace-miner/ledger.json` as durable task state when chat memory is not enough.
+
+Use a file ledger for large, delegated, multi-session, high-risk, or validation-heavy work. For small work, an inline checklist is enough unless a repo instruction requires the ledger.
 
 ## Required Fields
 
@@ -21,8 +23,9 @@ Use `.trace-miner/ledger.json` as durable task state when chat memory is not eno
 
 ## Workflow
 
-1. Add every user requirement as a ledger row.
-2. Keep risk rows explicit; for AERA include bias, data, cache, sim/live, recovery, and rollback risks when relevant.
-3. Record validation commands or exact blockers.
-4. Close requirements only with evidence.
-5. Before final answer, ensure no open risks remain unless accepted or deferred with a concrete reason.
+1. Choose file ledger, inline checklist, or no ledger based on task risk and repo instructions.
+2. Add every user requirement as a ledger row when using the file ledger.
+3. Keep risk rows explicit; for AERA include bias, data, cache, sim/live, recovery, and rollback risks when relevant.
+4. Record validation commands or exact blockers.
+5. Close requirements only with evidence.
+6. Before final answer, ensure no open risks remain unless accepted or deferred with a concrete reason.

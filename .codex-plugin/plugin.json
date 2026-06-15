@@ -1,11 +1,13 @@
 {
   "name": "codex-trace-miner",
-  "version": "0.1.0",
-  "description": "Trace Miner packages skills, hooks, docs, and evals for turning public agent trace patterns into safer Codex workflows.",
+  "version": "0.2.0",
+  "description": "Trace Miner packages routed skills, hooks, patterns, docs, MCP context, and evals for safer Codex workflows.",
   "license": "MIT",
   "keywords": [
     "codex",
     "agent-traces",
+    "skill-routing",
+    "behavior-patterns",
     "planning",
     "evals",
     "hooks"
@@ -16,7 +18,7 @@
   "interface": {
     "displayName": "Trace Miner",
     "shortDescription": "Mine trace patterns into safer Codex workflows",
-    "longDescription": "Trace Miner helps Codex extract reusable operating patterns from public trace datasets and related open-source projects without copying leaked prompts or raw chain-of-thought. It bundles concise workflow skills, conservative hooks, read-only context MCP tools, and before/after evals.",
+    "longDescription": "Trace Miner helps Codex route tasks, study public trace sources safely, extract reusable behavior patterns, and validate workflow changes without copying leaked prompts, raw chain-of-thought, or raw trace rows. It bundles concise workflow skills, conservative hooks, read-only context MCP tools, structured patterns, and before/after evals.",
     "developerName": "AERA Research",
     "category": "Productivity",
     "capabilities": [
@@ -25,9 +27,10 @@
       "Workflow"
     ],
     "defaultPrompt": [
-      "Use Trace Miner to plan this risky implementation.",
-      "Use Trace Miner to build a requirements ledger.",
-      "Use Trace Miner to run a finalguard review."
+      "Use skill-router for this task.",
+      "Use context-router to choose CodeGraph, Serena, Context7, MCP, or fallback.",
+      "Use trace-researcher to study these sources.",
+      "Use finalguard-review before final answer."
     ],
     "brandColor": "#2563EB"
   }

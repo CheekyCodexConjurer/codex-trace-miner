@@ -9,9 +9,9 @@ This index records public sources that Trace Miner can study for reusable operat
 | Source | Type | Checked | License or provenance status | Safe use |
 | --- | --- | --- | --- | --- |
 | [Glint-Research/Fable-5-traces](https://huggingface.co/datasets/Glint-Research/Fable-5-traces) | Hugging Face dataset | 2026-06-15 | Dataset card observed with AGPL-3.0 metadata and 4.67k train rows. | Use aggregate workflow, tool-order, validation, and failure-mode patterns. Do not copy trace text or chain-of-thought. |
-| [armand0e/claude-fable-5-claude-code](https://huggingface.co/datasets/armand0e/claude-fable-5-claude-code) | Hugging Face agent traces | 2026-06-15 | Public agent-traces dataset observed; license not recorded in this initial pass. | Use tool cadence and validation patterns after checking license before reuse. |
+| [armand0e/claude-fable-5-claude-code](https://huggingface.co/datasets/armand0e/claude-fable-5-claude-code) | Hugging Face agent traces | 2026-06-15 | Public agent-traces dataset observed; license not visible in inspected page output. | Use schema/metadata only and do not reuse content unless license/provenance is clarified. |
 | [armand0e/fable-5-claude-code-preview](https://huggingface.co/datasets/armand0e/fable-5-claude-code-preview) | Hugging Face preview dataset | 2026-06-15 | Public preview pages observed; use canonical dataset when both exist. | Treat as comparison evidence only. |
-| [kelexine/fable-5-sft-traces](https://huggingface.co/datasets/kelexine/fable-5-sft-traces) | Hugging Face dataset | 2026-06-15 | Search result observed; license not recorded in this initial pass. | Verify dataset card and license before relying on details. No fine-tuning in this project. |
+| [kelexine/fable-5-sft-traces](https://huggingface.co/datasets/kelexine/fable-5-sft-traces) | Hugging Face dataset | 2026-06-15 | Dataset card observed with AGPL-3.0 inherited from upstream derivative. | Use provenance/schema notes only. No fine-tuning in this project. |
 
 ## Related GitHub Projects
 

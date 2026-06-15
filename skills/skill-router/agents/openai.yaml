@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Router"
+  short_description: "Route Trace Miner skills by task type"
+  default_prompt: "Use $skill-router to choose the Trace Miner skills for this task."

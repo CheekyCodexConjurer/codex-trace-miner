@@ -6,7 +6,7 @@ This is scaffold validation, not a before/after behavior eval.
 
 | Check | Command | Result |
 | --- | --- | --- |
-| Hook and MCP tests | `python -m pytest tests/test_hooks.py -q -p no:cacheprovider` | Passed: 8 tests |
+| Hook and MCP tests | `python -m pytest tests/test_hooks.py tests/test_plugin_artifacts.py -q -p no:cacheprovider` | Passed: 12 tests |
 | Plugin artifact validation | `python scripts/validate_plugin.py` | Passed |
 | JSON validation | `python -m json.tool .codex-plugin/plugin.json`; `python -m json.tool hooks/hooks.json`; `python -m json.tool .mcp.json` | Passed |
 

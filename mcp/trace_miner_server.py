@@ -25,6 +25,14 @@ TOOLS = {
         "description": "Read the before/after eval scorecard.",
         "path": ROOT / "eval" / "before-after-scorecard.md",
     },
+    "get_tool_automation": {
+        "description": "Read Trace Miner Codex App tool routing for CodeGraph, Serena, Context7, and MCP.",
+        "path": ROOT / "docs" / "tool-automation.md",
+    },
+    "get_patterns": {
+        "description": "Read structured Trace Miner behavior patterns as JSONL.",
+        "path": ROOT / "patterns" / "patterns.jsonl",
+    },
 }
 
 

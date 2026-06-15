@@ -25,6 +25,8 @@ def build_summary(event: dict) -> str:
         "Trace Miner active. Use public trace sources only as behavioral evidence; "
         "do not copy leaked prompts or raw chain-of-thought. "
         f"Workspace is {git_state}; {ledger_state}; {change_state}. "
+        "Tool route: CodeGraph for repo map/impact, Serena for precise code understanding, "
+        "Context7 for current third-party docs. "
         "For meaningful changes, maintain .trace-miner/ledger.json and run explicit validation."
     )
 

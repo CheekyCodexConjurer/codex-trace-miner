@@ -1,6 +1,6 @@
 ---
 name: finalguard-review
-description: Run a final safety review before Codex claims completion. Use after implementation, docs changes, hooks, MCP changes, eval updates, backtest/research changes, or any task where requirements, changed files, tests, unresolved risks, or rollback need one last check.
+description: Final guard review before Codex final answers, commits, or handoffs after changed work. Use after implementation, docs changes, hooks, MCP changes, eval updates, backtest/research changes, or any task where requirements, changed files, tests, unresolved risks, rollback, or next action need one last check.
 ---
 
 # Finalguard Review
@@ -11,10 +11,12 @@ Do not approve work just because the diff exists. Check evidence.
 
 1. Requirements: every requested item is done, deferred with reason, or explicitly out of scope.
 2. Files: changed files match the intended scope.
-3. Validation: tests, lint, smoke checks, or justified blockers are recorded.
-4. Risks: no open risk remains hidden.
-5. AERA: bias, data consistency, cache, backtest assumptions, sim/live separation, rollback, and recovery were considered when relevant.
-6. Final answer: includes what changed, validation, residual risk, and next action.
+3. Intent: the diff matches the acceptance gates, not just the agent's claims.
+4. Validation: tests, lint, smoke checks, or justified blockers are recorded.
+5. Risks: no open risk remains hidden.
+6. Source hygiene: source-derived work contains no raw trace rows, leaked prompts, chain-of-thought, secrets, or training instructions.
+7. AERA: bias, data consistency, cache, backtest assumptions, sim/live separation, rollback, and recovery were considered when relevant.
+8. Final answer: includes what changed, validation, residual risk, and next action.
 
 ## Output
 

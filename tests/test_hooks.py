@@ -121,7 +121,7 @@ def test_mcp_server_lists_read_only_tools():
     assert completed.returncode == 0
     response = json.loads(completed.stdout)
     names = {tool["name"] for tool in response["result"]["tools"]}
-    assert {"get_source_index", "get_eval_scorecard"} <= names
+    assert {"get_source_index", "get_eval_scorecard", "get_patterns", "get_tool_automation"} <= names
 
 
 def test_mcp_config_command_starts_server():
@@ -156,3 +156,5 @@ def test_mcp_config_command_starts_server():
     response = json.loads(completed.stdout)
     names = {tool["name"] for tool in response["result"]["tools"]}
     assert "get_source_index" in names
+    assert "get_patterns" in names
+    assert "get_tool_automation" in names
