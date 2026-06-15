@@ -17,6 +17,19 @@ For any meaningful change, update or create `.trace-miner/ledger.json` with requ
 | Debugging | `debug-autopsy` -> `finalguard-review` |
 | Final answer after changes | `finalguard-review` |
 
+## Fusion Routing
+
+Use `fusion-orchestrator` only when extra Codex subagents reduce real risk. Fusion is Codex-only: no OpenRouter, no external model API, no hosting, no fine-tuning, no Fable prompt copying, no raw trace rows, and no chain-of-thought storage.
+
+| Risk | Fusion mode | Route |
+| --- | --- | --- |
+| Trivial | none | `context-router` -> `finalguard-review` |
+| Medium | mini | `trace-architect` + `trace-reviewer`, parent implements or assigns one bounded implementer |
+| Complex | full | `trace-architect` + `trace-context-scout` + one write owner + `trace-reviewer` |
+| Critical | critical | full + `requirements-ledger` + stricter `finalguard-review` + explicit validation evidence |
+
+Subagents are read-only unless `trace-implementer` is explicitly assigned one bounded write scope. Never let multiple agents edit overlapping files.
+
 ## Codex App Tool Routing
 
-Use CodeGraph first for repo architecture, symbols, callers, impact, and where-is questions. Use Serena for precise Python/code understanding or symbol-aware edits after activating the project. Use Context7 only for current third-party library, framework, SDK, API, CLI, or cloud-service docs. If one of these tools is unavailable, state that briefly and use the smallest bounded fallback.
+Use CodeGraph first for repo architecture, symbols, callers, impact, and where-is questions. Use Serena for precise Python/code understanding or symbol-aware edits after activating the project. Use Context7 only for current third-party library, framework, SDK, API, CLI, or cloud-service docs. Use the local Fable Mode MCP for read-only Trace Miner context. If one of these tools is unavailable, state that briefly and use the smallest bounded fallback.

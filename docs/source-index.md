@@ -33,6 +33,6 @@ Distilled-model repos are ecosystem evidence only. This project must not train, 
 
 1. Record source URL, date checked, license or unknown license, and evidence type.
 2. Extract only behavior patterns: context gathering, planning, handoff, validation, review, recovery, and measurable eval criteria.
-3. Do not paste trace messages longer than short identifiers or metadata needed for audit.
+3. Do not paste raw trace rows, trace messages, prompts, outputs, or chain-of-thought. Use only source-level metadata, schema, counts, file names, and aggregate evidence.
 4. Do not preserve chain-of-thought, hidden prompts, private user data, secrets, or proprietary code.
 5. Prefer docs and eval artifacts over runtime skill bloat.

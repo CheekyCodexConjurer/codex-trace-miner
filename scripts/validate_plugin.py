@@ -2,6 +2,7 @@
 import json
 import re
 import sys
+import tomllib
 from pathlib import Path
 
 
@@ -9,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_SKILLS = {
     "trace-miner",
     "trace-researcher",
+    "fusion-orchestrator",
     "skill-router",
     "planning-architect",
     "requirements-ledger",
@@ -23,10 +25,19 @@ REQUIRED_DOCS = {
     "docs/codex-operating-protocol.md",
     "docs/eval-plan.md",
     "docs/behavior-study.md",
+    "docs/fusion-protocol.md",
+    "docs/fusion-modes.md",
     "docs/routing-guide.md",
     "docs/source-notes.md",
     "docs/tool-automation.md",
     "eval/before-after-scorecard.md",
+    "eval/fusion-scorecard.md",
+}
+REQUIRED_CUSTOM_AGENTS = {
+    "trace-architect": "read-only",
+    "trace-context-scout": "read-only",
+    "trace-implementer": "write-explicit-only",
+    "trace-reviewer": "read-only",
 }
 
 
@@ -77,6 +88,8 @@ def validate_skill(path: Path) -> None:
     openai_yaml = path.parent / "agents" / "openai.yaml"
     if openai_yaml.exists():
         metadata = openai_yaml.read_text(encoding="utf-8")
+        if "interface:" not in metadata or "default_prompt:" not in metadata:
+            fail(f"agents/openai.yaml should use interface/default_prompt metadata: {openai_yaml}")
         if f"${name}" not in metadata:
             fail(f"agents/openai.yaml default prompt should mention ${name}: {openai_yaml}")
 
@@ -105,8 +118,26 @@ def validate_hooks_and_mcp() -> None:
         if event not in hooks.get("hooks", {}):
             fail(f"missing hook event {event}")
     mcp = load_json(".mcp.json")
-    if "trace-miner-context" not in mcp.get("mcp_servers", {}):
-        fail("missing trace-miner-context MCP server")
+    if "fable-mode" not in mcp.get("mcp_servers", {}):
+        fail("missing fable-mode MCP server")
+
+
+def validate_custom_agents() -> None:
+    agents_dir = ROOT / ".codex" / "agents"
+    if not agents_dir.exists():
+        fail("missing .codex/agents")
+    for name, expected_permission in REQUIRED_CUSTOM_AGENTS.items():
+        path = agents_dir / f"{name}.toml"
+        if not path.exists():
+            fail(f"missing custom agent: {path}")
+        data = tomllib.loads(path.read_text(encoding="utf-8"))
+        if data.get("name") != name:
+            fail(f"custom agent name mismatch: {path}")
+        if data.get("permission") != expected_permission:
+            fail(f"custom agent permission mismatch: {path}")
+        instructions = data.get("instructions")
+        if not isinstance(instructions, str) or "OpenRouter" not in instructions:
+            fail(f"custom agent must include safety instructions: {path}")
 
 
 def validate_patterns() -> None:
@@ -145,6 +176,8 @@ def validate_patterns() -> None:
             fail(f"pattern line {line_number} destination must be a non-empty list")
         if record["confidence"] not in {"low", "medium", "high"}:
             fail(f"pattern line {line_number} has invalid confidence")
+        if record["confidence"] != "high" and "skill rule" in record["destination"]:
+            fail(f"pattern line {line_number} promotes non-high-confidence pattern to skill rule")
         count += 1
     if count < 7:
         fail("patterns.jsonl should contain at least 7 records")
@@ -156,6 +189,7 @@ def main() -> int:
         validate_skills()
         validate_docs()
         validate_hooks_and_mcp()
+        validate_custom_agents()
         validate_patterns()
     except Exception as exc:
         print(f"FAIL: {exc}")

@@ -43,6 +43,7 @@ After enabling it, review and trust the bundled hooks in Codex. Plugin hooks are
 - `Use trace-researcher to study these sources and improve the skills.`
 - `Use finalguard-review before final answer.`
 - `Use context-router to choose CodeGraph, Serena, Context7, MCP, or fallback.`
+- `Use fusion-orchestrator for this complex task.`
 
 Recommended prompts:
 
@@ -55,6 +56,20 @@ Recommended prompts:
 - `Use $context-router to route CodeGraph, Serena, Context7, MCP, or fallback for this task.`
 - `Use $finalguard-review before final answer.`
 - `Use $debug-autopsy to explain why this failed and how to prevent a repeat.`
+- `Use $fusion-orchestrator to choose none, mini, full, or critical Trace Fusion mode.`
+
+## Trace Fusion
+
+Trace Fusion is a local Codex-only workflow for coordinating multiple GPT-5.5 Codex subagents with different roles. It does not use OpenRouter, external model APIs, hosting, fine-tuning, Fable prompts, raw trace rows, or chain-of-thought.
+
+Modes:
+
+- `none`: `context-router` + `finalguard-review` for trivial work.
+- `mini`: `trace-architect` + `trace-reviewer`; parent implements or assigns one bounded implementer.
+- `full`: architect + context scout + one write owner + reviewer.
+- `critical`: full mode + `requirements-ledger` + stricter finalguard and explicit validation evidence.
+
+Project-scoped agents live in `.codex/agents/`: `trace-architect`, `trace-context-scout`, `trace-implementer`, and `trace-reviewer`. Subagents are read-only unless `trace-implementer` is explicitly assigned one bounded write scope.
 
 ## Codex App Tool Automation
 
@@ -63,7 +78,7 @@ Trace Miner routes Codex App tools through `context-router`:
 - CodeGraph for repo architecture, symbols, callers, impact, and where-is questions.
 - Serena for precise Python/code understanding or symbol-aware edits after project activation.
 - Context7 for current third-party library, framework, SDK, API, CLI, or cloud-service docs.
-- Trace Miner MCP for read-only source, pattern, eval, and tool-automation context.
+- Fable Mode MCP for read-only source, pattern, eval, and tool-automation context.
 
 Local indexes stay local: `.codegraph/` and `.serena/` are ignored by git.
 
@@ -92,7 +107,7 @@ python -m pytest tests/test_hooks.py tests/test_plugin_artifacts.py -q
 python C:/Users/mathe/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/trace-miner
 ```
 
-Repeat the skill validator for each skill folder. The MCP skeleton can be smoke-tested with:
+Repeat the skill validator for each skill folder. The Fable Mode MCP server can be smoke-tested with:
 
 ```bash
 printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | python mcp/trace_miner_server.py --once

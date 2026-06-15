@@ -1,6 +1,6 @@
 {
   "mcp_servers": {
-    "trace-miner-context": {
+    "fable-mode": {
       "command": "python",
       "args": [
         "${PLUGIN_ROOT}/mcp/trace_miner_server.py"

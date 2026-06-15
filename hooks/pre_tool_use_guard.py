@@ -8,14 +8,16 @@ from common import read_event, workspace_from, write_json
 
 
 DENY_PATTERNS = [
-    (r"\brm\s+(-[^\s]*r[^\s]*f|-[^\s]*f[^\s]*r)\b", "destructive recursive removal"),
-    (r"\bRemove-Item\b.*\b-Recurse\b", "destructive recursive removal"),
+    (r"\brm\s+(-[^\s]*r[^\s]*f|-[^\s]*f[^\s]*r|-[^\s]*r|/s)\b", "destructive recursive removal"),
+    (r"\brm\b.*\s-Recurse(?:\s|$)", "destructive recursive removal"),
+    (r"\brmdir\b.*(?:\s/s\b|\s-Recurse(?:\s|$))", "destructive recursive removal"),
+    (r"\bRemove-Item\b.*\s-Recurse(?:\s|$)", "destructive recursive removal"),
     (r"\bgit\s+reset\s+--hard\b", "destructive git reset"),
     (r"\bgit\s+clean\b.*\s-[^\s]*[fdx]", "destructive git clean"),
     (r"\bgit\s+(checkout|restore)\b.*\s(--\s*)?(\.|\*)\s*$", "broad destructive git restore"),
     (r"\bgit\s+push\b.*--force", "force push"),
     (r"\bgit\s+(rebase|merge|stash)\b", "history or state changing git command"),
-    (r"\bgit\s+add\s+(\.|-A|--all)\b", "broad staging command"),
+    (r"\bgit\s+(add|stage)\s+(?:--\s*)?(?:\.|-A|--all)(?:\s|$)", "broad staging command"),
     (r"\b(curl|wget)\b.*\|\s*(sh|bash|zsh|pwsh|powershell)\b", "remote script execution"),
     (r"\b(iwr|Invoke-WebRequest)\b.*\|\s*(iex|Invoke-Expression)\b", "remote PowerShell execution"),
     (r"\b(npm|pnpm|yarn)\s+publish\b", "package publishing"),
@@ -42,7 +44,20 @@ def _command_from(event: dict) -> str:
                 return value
     if isinstance(tool_input, str):
         return tool_input
+    if isinstance(event.get("tool_input"), dict):
+        payload = json_dumps_safe(event["tool_input"])
+        if payload:
+            return payload
     return ""
+
+
+def json_dumps_safe(value: object) -> str:
+    try:
+        import json
+
+        return json.dumps(value, sort_keys=True)
+    except Exception:
+        return ""
 
 
 def evaluate(event: dict, workspace: Path | None = None) -> dict:

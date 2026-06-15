@@ -11,7 +11,7 @@ Trace Miner routes Codex App tools by evidence need. These tools are optional ac
 | Repo architecture, symbols, callers, impact, or where-is questions | CodeGraph first | Bounded `rg` and targeted file reads |
 | Precise Python/code understanding or symbol-aware edits | Serena after reading its initial instructions and activating this project | CodeGraph context, then targeted direct edits |
 | Current third-party library, framework, SDK, API, CLI, or cloud-service docs | Context7: resolve library ID, then query docs | Official primary docs or bounded web search |
-| Trace Miner source/pattern/eval context | Trace Miner MCP read-only tools | Local docs and `patterns/patterns.jsonl` |
+| Trace Miner source/pattern/eval context | Fable Mode MCP read-only tools | Local docs and `patterns/patterns.jsonl` |
 
 ## Repo Setup
 

@@ -119,6 +119,78 @@
       "text": "Commit all owned changes with title/description and push to origin.",
       "status": "done",
       "evidence": "All owned changes will be staged explicitly, committed, and pushed; final response records commit and push result."
+    },
+    {
+      "id": "REQ-21",
+      "text": "Add Codex-only Trace Fusion workflow without OpenRouter, external model API, hosting, fine-tuning, Fable prompts, raw trace rows, or chain-of-thought.",
+      "status": "done",
+      "evidence": "skills/fusion-orchestrator/SKILL.md, docs/fusion-protocol.md, docs/fusion-modes.md"
+    },
+    {
+      "id": "REQ-22",
+      "text": "Add project-scoped custom Trace Fusion agents with one-write-owner discipline.",
+      "status": "done",
+      "evidence": ".codex/agents/trace-architect.toml, trace-context-scout.toml, trace-implementer.toml, trace-reviewer.toml"
+    },
+    {
+      "id": "REQ-23",
+      "text": "Add Trace Fusion eval and structured behavior patterns.",
+      "status": "done",
+      "evidence": "eval/fusion-scorecard.md and PAT-023 through PAT-027 in patterns/patterns.jsonl"
+    },
+    {
+      "id": "REQ-24",
+      "text": "Expose Fusion protocol and modes through read-only MCP tools.",
+      "status": "done",
+      "evidence": "mcp/trace_miner_server.py exposes get_fusion_protocol and get_fusion_modes"
+    },
+    {
+      "id": "REQ-25",
+      "text": "Update routing docs and usage for Trace Fusion.",
+      "status": "done",
+      "evidence": "AGENTS.md, README.md, docs/routing-guide.md, skills/skill-router/SKILL.md"
+    },
+    {
+      "id": "REQ-26",
+      "text": "Add validation for Fusion skill, custom agents, patterns, and MCP tools.",
+      "status": "done",
+      "evidence": "scripts/validate_plugin.py, tests/test_plugin_artifacts.py, tests/test_hooks.py"
+    },
+    {
+      "id": "REQ-27",
+      "text": "Harden PreToolUse guard against broad staging and recursive deletion commands.",
+      "status": "done",
+      "evidence": "hooks/pre_tool_use_guard.py and tests/test_hooks.py block git add ., git add -- ., git add -A/--all, git stage ., Remove-Item -Recurse, rm -r/-rf/-fr/-Recurse, and rmdir recursive forms."
+    },
+    {
+      "id": "REQ-28",
+      "text": "Harden Stop guard against stale ledgers for dirty Git worktrees.",
+      "status": "done",
+      "evidence": "hooks/stop_guard.py requires workspace_state.changed_files to match current git status --short; tests cover missing and divergent snapshots."
+    },
+    {
+      "id": "REQ-29",
+      "text": "Rename MCP server to Fable Mode and expose Fusion scorecard.",
+      "status": "done",
+      "evidence": ".mcp.json uses fable-mode; MCP initialize returns Fable Mode; get_fusion_scorecard is listed and callable."
+    },
+    {
+      "id": "REQ-30",
+      "text": "Make MCP robust for invalid JSON-RPC input.",
+      "status": "done",
+      "evidence": "mcp/trace_miner_server.py returns -32700 for parse errors and -32600 for non-object payloads; tests cover both."
+    },
+    {
+      "id": "REQ-31",
+      "text": "Align safety rules and confidence gating across finalguard, trace-miner, source-index, skill-router, and patterns.",
+      "status": "done",
+      "evidence": "finalguard checks external APIs/OpenRouter/hosting/fine-tuning and stale ledgers; source-index forbids trace messages; medium patterns no longer include skill rule."
+    },
+    {
+      "id": "REQ-32",
+      "text": "Document current ledger snapshot requirement.",
+      "status": "done",
+      "evidence": "skills/requirements-ledger/SKILL.md documents workspace_state.changed_files from git status --short."
     }
   ],
   "validation": [
@@ -211,6 +283,36 @@
       "command": "MCP smoke get_tool_automation",
       "status": "pass",
       "evidence": "get_tool_automation returned tool routing guidance on 2026-06-15"
+    },
+    {
+      "command": "python -m pytest tests\\test_hooks.py tests\\test_plugin_artifacts.py -q -p no:cacheprovider",
+      "status": "pass",
+      "evidence": "16 passed after Trace Fusion implementation on 2026-06-15"
+    },
+    {
+      "command": "python scripts\\validate_plugin.py",
+      "status": "pass",
+      "evidence": "Trace Miner plugin validation passed after Trace Fusion implementation on 2026-06-15"
+    },
+    {
+      "command": "python -m pytest tests\\test_hooks.py -q -p no:cacheprovider",
+      "status": "pass",
+      "evidence": "18 passed after guard hardening on 2026-06-15"
+    },
+    {
+      "command": "python -m pytest tests\\test_hooks.py tests\\test_plugin_artifacts.py -q -p no:cacheprovider",
+      "status": "pass",
+      "evidence": "27 passed after Fable Mode/guard hardening on 2026-06-15"
+    },
+    {
+      "command": "python scripts\\validate_plugin.py",
+      "status": "pass",
+      "evidence": "Trace Miner plugin validation passed after Fable Mode/guard hardening on 2026-06-15"
+    },
+    {
+      "command": "MCP smoke parse error, non-object request, initialize, tools/list, get_fusion_scorecard",
+      "status": "pass",
+      "evidence": "Returned -32700, -32600, Fable Mode, tools list, and fusion scorecard content on 2026-06-15"
     }
   ],
   "changed_scope": [
@@ -289,6 +391,46 @@
     {
       "path": "hooks/session_start_summary.py",
       "reason": "Session reminder for CodeGraph, Serena, and Context7 routes"
+    },
+    {
+      "path": "skills/fusion-orchestrator/",
+      "reason": "Trace Fusion runtime skill"
+    },
+    {
+      "path": ".codex/agents/",
+      "reason": "Project-scoped Trace Fusion custom agents"
+    },
+    {
+      "path": "docs/fusion-protocol.md",
+      "reason": "Trace Fusion protocol"
+    },
+    {
+      "path": "docs/fusion-modes.md",
+      "reason": "Adaptive Fusion mode guidance"
+    },
+    {
+      "path": "eval/fusion-scorecard.md",
+      "reason": "Fusion eval scorecard"
+    },
+    {
+      "path": "hooks/pre_tool_use_guard.py",
+      "reason": "Broader risky command blocking"
+    },
+    {
+      "path": "hooks/stop_guard.py",
+      "reason": "Stale ledger detection"
+    },
+    {
+      "path": ".mcp.json",
+      "reason": "Fable Mode MCP name"
+    },
+    {
+      "path": "mcp/trace_miner_server.py",
+      "reason": "Fusion scorecard tool and JSON-RPC error handling"
+    },
+    {
+      "path": "skills/requirements-ledger/SKILL.md",
+      "reason": "workspace_state.changed_files documentation"
     }
   ],
   "risks": [
@@ -327,7 +469,53 @@
       "description": "The user said opengraph; implementation assumes they meant CodeGraph, the Codex App code graph tool. If they meant web OpenGraph metadata, that is a separate task.",
       "status": "accepted",
       "owner": "Trace Miner maintainer"
+    },
+    {
+      "id": "R-7",
+      "description": "Trace Fusion custom agent TOML is project-scoped and validated locally, but final Codex App loading behavior depends on the app custom-agent loader.",
+      "status": "accepted",
+      "owner": "Trace Miner maintainer"
+    },
+    {
+      "id": "R-8",
+      "description": "Fusion scorecard exists, but no before/after Fusion behavior run has been completed yet.",
+      "status": "deferred_with_reason",
+      "owner": "future evaluator"
+    },
+    {
+      "id": "R-9",
+      "description": "Older ledgers without workspace_state.changed_files will block finalization on dirty Git worktrees; this is intentional to prevent stale validation.",
+      "status": "accepted",
+      "owner": "Trace Miner maintainer"
     }
   ],
-  "next_action": "Commit and push all owned changes, then report hash, validation, and residual risk."
+  "next_action": "Run final validation after ledger snapshot refresh and report changed files, validation, and residual risks.",
+  "workspace_state": {
+    "changed_files": [
+      "M .codex-plugin/plugin.json",
+      "M .mcp.json",
+      "M .trace-miner/ledger.json",
+      "M AGENTS.md",
+      "M README.md",
+      "M docs/routing-guide.md",
+      "M docs/source-index.md",
+      "M docs/tool-automation.md",
+      "M hooks/pre_tool_use_guard.py",
+      "M hooks/stop_guard.py",
+      "M mcp/trace_miner_server.py",
+      "M patterns/patterns.jsonl",
+      "M scripts/validate_plugin.py",
+      "M skills/finalguard-review/SKILL.md",
+      "M skills/requirements-ledger/SKILL.md",
+      "M skills/skill-router/SKILL.md",
+      "M skills/trace-miner/SKILL.md",
+      "M tests/test_hooks.py",
+      "M tests/test_plugin_artifacts.py",
+      "?? .codex/",
+      "?? docs/fusion-modes.md",
+      "?? docs/fusion-protocol.md",
+      "?? eval/fusion-scorecard.md",
+      "?? skills/fusion-orchestrator/"
+    ]
+  }
 }

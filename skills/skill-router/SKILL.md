@@ -13,7 +13,8 @@ Classify the task, then choose the smallest useful skill route.
 | --- | --- |
 | Research or source study | `trace-researcher` |
 | Risky or multi-file implementation | `planning-architect` -> `context-router` -> `requirements-ledger` |
-| Simple implementation | `context-router` -> `finalguard-review` |
+| Simple non-significant implementation | `context-router` -> `finalguard-review` |
+| Multi-agent Fusion | `fusion-orchestrator` -> selected mode -> `finalguard-review` |
 | Handoff or execution plan | `implementation-pack` |
 | Failure, regression, or broken validation | `debug-autopsy` -> `finalguard-review` |
 | Final answer after changes | `finalguard-review` |
@@ -24,9 +25,10 @@ Classify the task, then choose the smallest useful skill route.
 2. Select only the skills needed for that task.
 3. Put broad source study through `trace-researcher`; put source-derived behavior changes through `trace-miner` and `finalguard-review`.
 4. Keep medium/low-confidence source findings in docs/evals; route only high-confidence behavior changes into runtime skills or hooks.
-5. Add `requirements-ledger` only when work has multiple requirements, validation obligations, delegation, multi-session state, or unresolved risk.
-6. Use `context-router` when the task depends on repo files, source evidence, CodeGraph, Serena, Context7, MCP, or safe fallbacks.
-7. End changed-work sessions with `finalguard-review`.
+5. Add `requirements-ledger` when repo instructions require it, or when work has meaningful changes, multiple requirements, validation obligations, delegation, multi-session state, or unresolved risk.
+6. Use `fusion-orchestrator` only when Codex subagents reduce real risk; use none, mini, full, or critical mode.
+7. Use `context-router` when the task depends on repo files, source evidence, CodeGraph, Serena, Context7, MCP, or safe fallbacks.
+8. End changed-work sessions with `finalguard-review`.
 
 ## Output
 

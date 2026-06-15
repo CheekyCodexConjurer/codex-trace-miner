@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fusion Orchestrator"
+  short_description: "Route adaptive Trace Fusion subagents"
+  default_prompt: "Use $fusion-orchestrator to choose an adaptive Trace Fusion mode and coordinate Codex-only subagents."

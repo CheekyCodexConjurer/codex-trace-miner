@@ -1,6 +1,6 @@
 {
   "name": "codex-trace-miner",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Trace Miner packages routed skills, hooks, patterns, docs, MCP context, and evals for safer Codex workflows.",
   "license": "MIT",
   "keywords": [
@@ -29,6 +29,7 @@
     "defaultPrompt": [
       "Use skill-router for this task.",
       "Use context-router to choose CodeGraph, Serena, Context7, MCP, or fallback.",
+      "Use fusion-orchestrator only when subagents reduce real risk.",
       "Use trace-researcher to study these sources.",
       "Use finalguard-review before final answer."
     ],

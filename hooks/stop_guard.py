@@ -22,6 +22,27 @@ def _ledger_has_validation(ledger: dict) -> bool:
     return False
 
 
+def _normalized_changes(changes: list[str]) -> list[str]:
+    return sorted(str(change).strip() for change in changes if str(change).strip())
+
+
+def _ledger_change_snapshot(ledger: dict) -> list[str]:
+    workspace_state = ledger.get("workspace_state")
+    if not isinstance(workspace_state, dict):
+        return []
+    changed = workspace_state.get("changed_files")
+    if not isinstance(changed, list):
+        return []
+    return _normalized_changes([str(item) for item in changed])
+
+
+def _ledger_covers_changes(ledger: dict, changes: list[str]) -> bool:
+    expected = _normalized_changes(changes)
+    if not expected:
+        return True
+    return _ledger_change_snapshot(ledger) == expected
+
+
 def _unresolved_risks(ledger: dict) -> list[str]:
     risks = ledger.get("risks", [])
     unresolved = []
@@ -59,6 +80,15 @@ def evaluate_stop(event: dict, workspace=None) -> dict:
             "reason": (
                 f"Trace Miner final guard found changed files but {ledger_error}. "
                 "Create .trace-miner/ledger.json with requirements, validation, and risks before finalizing."
+            ),
+        }
+
+    if not _ledger_covers_changes(ledger, changes):
+        return {
+            "action": "block",
+            "reason": (
+                "Trace Miner final guard found changed files but the ledger workspace_state.changed_files "
+                "does not match the current git status. Refresh .trace-miner/ledger.json before finalizing."
             ),
         }
 

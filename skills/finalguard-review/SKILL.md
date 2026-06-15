@@ -13,10 +13,12 @@ Do not approve work just because the diff exists. Check evidence.
 2. Files: changed files match the intended scope.
 3. Intent: the diff matches the acceptance gates, not just the agent's claims.
 4. Validation: tests, lint, smoke checks, or justified blockers are recorded.
-5. Risks: no open risk remains hidden.
-6. Source hygiene: source-derived work contains no raw trace rows, leaked prompts, chain-of-thought, secrets, or training instructions.
-7. AERA: bias, data consistency, cache, backtest assumptions, sim/live separation, rollback, and recovery were considered when relevant.
-8. Final answer: includes what changed, validation, residual risk, and next action.
+5. Ledger: changed Git work has current `workspace_state.changed_files` evidence, not a stale ledger.
+6. Patterns: medium/low-confidence patterns are not promoted to runtime skill or hook rules.
+7. Risks: no open risk remains hidden.
+8. Source and dependency hygiene: changed work contains no OpenRouter, external model API, hosting, fine-tuning, Fable prompt copying, raw trace rows, leaked prompts, chain-of-thought, secrets, or training instructions.
+9. AERA: bias, data consistency, cache, backtest assumptions, sim/live separation, rollback, and recovery were considered when relevant.
+10. Final answer: includes what changed, validation, residual risk, and next action.
 
 ## Output
 

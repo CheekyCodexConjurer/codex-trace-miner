@@ -25,9 +25,21 @@ TOOLS = {
         "description": "Read the before/after eval scorecard.",
         "path": ROOT / "eval" / "before-after-scorecard.md",
     },
+    "get_fusion_scorecard": {
+        "description": "Read the Trace Fusion eval scorecard.",
+        "path": ROOT / "eval" / "fusion-scorecard.md",
+    },
     "get_tool_automation": {
         "description": "Read Trace Miner Codex App tool routing for CodeGraph, Serena, Context7, and MCP.",
         "path": ROOT / "docs" / "tool-automation.md",
+    },
+    "get_fusion_protocol": {
+        "description": "Read the local Codex-only Trace Fusion protocol.",
+        "path": ROOT / "docs" / "fusion-protocol.md",
+    },
+    "get_fusion_modes": {
+        "description": "Read Trace Fusion adaptive mode guidance.",
+        "path": ROOT / "docs" / "fusion-modes.md",
     },
     "get_patterns": {
         "description": "Read structured Trace Miner behavior patterns as JSONL.",
@@ -42,6 +54,12 @@ def response(request_id, result):
 
 def error_response(request_id, code, message):
     return {"jsonrpc": "2.0", "id": request_id, "error": {"code": code, "message": message}}
+
+
+def request_id_from(payload):
+    if isinstance(payload, dict):
+        return payload.get("id")
+    return None
 
 
 def tool_list():
@@ -79,6 +97,9 @@ def call_tool(name: str):
 
 
 def handle(payload: dict) -> dict | None:
+    if not isinstance(payload, dict):
+        return error_response(None, -32600, "invalid request: JSON-RPC payload must be an object")
+
     method = payload.get("method")
     request_id = payload.get("id")
 
@@ -88,7 +109,7 @@ def handle(payload: dict) -> dict | None:
             {
                 "protocolVersion": "2024-11-05",
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "trace-miner-context", "version": "0.1.0"},
+                "serverInfo": {"name": "Fable Mode", "version": "0.3.0"},
             },
         )
     if method == "notifications/initialized":
@@ -101,6 +122,8 @@ def handle(payload: dict) -> dict | None:
             return response(request_id, call_tool(name))
         except (KeyError, FileNotFoundError) as exc:
             return error_response(request_id, -32000, str(exc))
+        except Exception as exc:
+            return error_response(request_id, -32603, f"internal error: {exc}")
 
     return error_response(request_id, -32601, f"method not found: {method}")
 
@@ -109,7 +132,15 @@ def serve_once() -> int:
     line = sys.stdin.readline()
     if not line:
         return 0
-    result = handle(json.loads(line))
+    try:
+        payload = json.loads(line)
+    except json.JSONDecodeError as exc:
+        result = error_response(None, -32700, f"parse error: {exc.msg}")
+    else:
+        try:
+            result = handle(payload)
+        except Exception as exc:
+            result = error_response(request_id_from(payload), -32603, f"internal error: {exc}")
     if result is not None:
         sys.stdout.write(json.dumps(result) + "\n")
         sys.stdout.flush()
@@ -120,7 +151,15 @@ def serve_loop() -> int:
     for line in sys.stdin:
         if not line.strip():
             continue
-        result = handle(json.loads(line))
+        try:
+            payload = json.loads(line)
+        except json.JSONDecodeError as exc:
+            result = error_response(None, -32700, f"parse error: {exc.msg}")
+        else:
+            try:
+                result = handle(payload)
+            except Exception as exc:
+                result = error_response(request_id_from(payload), -32603, f"internal error: {exc}")
         if result is not None:
             sys.stdout.write(json.dumps(result) + "\n")
             sys.stdout.flush()
